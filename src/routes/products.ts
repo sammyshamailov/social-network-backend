@@ -1,21 +1,24 @@
 import { Request, Response, NextFunction, Router } from 'express';
-import { Product } from '../models';
-//import uuidv1 from 'uuid/v1';
+import { ProductData, Product } from '../models';
+import uuidv1 from 'uuid/v1';
 
 
 // TODO: should be elsewhere
-const productsState: Product[] = [
-    { id: "uuidv1()", name: 'CVWeb', categoryId: "uuidv3()", itemInStock:5},
-    { id: "uuidv2()", name: 'CVCloud', categoryId: "uuidv4()", itemInStock:5},
-  ];
+// const products: Product1[] = [
+//     { id: "uuidv1()", name: 'CVWeb', categoryId: "uuidv3()", itemInStock:5},
+//     { id: "uuidv2()", name: 'CVCloud', categoryId: "uuidv4()", itemInStock:5},
+//   ];
+
+const products: Product[] = ProductData;
+console.log(products)
   
-  function loadProjects(): Promise<Product[]> {
-    return Promise.resolve(productsState);
+  function loadProducts(): Promise<Product[]> {
+    return Promise.resolve(products);
   }
   
   // function findProjectIndex(req: Request, res: Response, next: NextFunction) {
   //   const id = req.params.id;
-  //   const matchingIndex = projects.findIndex(o => o.id === id);
+  //   const matchingIndex = products.findIndex(o => o.id === id);
   
   //   if (matchingIndex < 0) {
   //     res.sendStatus(404);
@@ -23,7 +26,7 @@ const productsState: Product[] = [
   //   }
   
   //   res.locals.matchingIndex = matchingIndex;
-  //   res.locals.projectId = id;
+  //   res.locals.productId = id;
   //   next();
   // }
   
@@ -40,13 +43,13 @@ const productsState: Product[] = [
   }
   
   router.get('/', wrapAsyncAndSend(async (req, res, next) => {
-    const projects = await loadProjects();
+    const projects = await loadProducts();
     return projects;
   }));
   
   // router.get('/:id', (req, res) => {
   //   const id = req.params.id;
-  //   const matching = projects.find(o => o.id === id);
+  //   const matching = products.find(o => o.id === id);
   
   //   if (!matching) {
   //     res.sendStatus(404);
@@ -57,9 +60,9 @@ const productsState: Product[] = [
   // });
   
   // router.post('/', (req, res) => {
-  //   const project: Project = req.body;
+  //   const project: Product = req.body;
   //   project.id = uuidv1();
-  //   projects.push(project);
+  //   products.push(project);
   
   //   res.status(201).send(project);
   // });
@@ -69,10 +72,10 @@ const productsState: Product[] = [
   //   (req, res) => {
   //     const { projectId, matchingIndex } = res.locals;
   
-  //     const project: Project = req.body;
+  //     const project: Product = req.body;
   //     project.id = projectId;
   
-  //     projects[matchingIndex] = project;
+  //     products[matchingIndex] = project;
   
   //     res.send(project);
   //   },
@@ -81,7 +84,7 @@ const productsState: Product[] = [
   // router.delete('/:id',
   //   findProjectIndex,
   //   (req, res) => {
-  //     projects.splice(res.locals.matchingIndex, 1);
+  //     products.splice(res.locals.matchingIndex, 1);
   
   //     res.sendStatus(204);
   //   },

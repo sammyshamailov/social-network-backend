@@ -13,7 +13,7 @@ app.use(cors());
 //app.use(logMiddleware);
 
 // app.get('/api/test', (req, res) => res.send('Hello Express'));
-app.use('/api/products', productsRouter);
+app.use('/products', productsRouter);
 
 // app.use(logErrors);
 // app.use(clientErrorHandler);

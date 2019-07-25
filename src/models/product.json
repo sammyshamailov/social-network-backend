@@ -1,0 +1,34 @@
+{
+    "Product":[
+        {
+            "id": "1d55741c-af26-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d55767e-af26-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Camera",
+            "itemInStock": 5
+        },
+        {
+            "id": "1d5579ee-af26-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d557b6a-af26-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Keyboard",
+            "itemInStock": 1
+        },
+        {
+            "id": "1d557ca0-af26-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d557dd6-af26-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Mouse",
+            "itemInStock": 2
+        },
+        {
+            "id": "1d557f02-af26-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d55813c-af26-11e9-a2a3-2a2ae2dbcce4",
+            "name": "HardDisk",
+            "itemInStock": 3
+        },
+        {
+            "id": "1d5584ac-af26-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d558614-af26-11e9-a2a3-2a2ae2dbcce4",
+            "name": "CellPhone",
+            "itemInStock": 4
+        }
+    ]
+}

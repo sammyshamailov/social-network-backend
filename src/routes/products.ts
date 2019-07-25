@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction, Router } from 'express';
 import { Product } from '../models';
-import uuidv1 from 'uuid/v1';
+//import uuidv1 from 'uuid/v1';
 
 
 // TODO: should be elsewhere
 const productsState: Product[] = [
-    { id: uuidv1(), name: 'CVWeb', categoryId: uuidv1(), itemInStock:5},
-    { id: uuidv1(), name: 'CVCloud', categoryId: uuidv1(), itemInStock:5},
+    { id: "uuidv1()", name: 'CVWeb', categoryId: "uuidv3()", itemInStock:5},
+    { id: "uuidv2()", name: 'CVCloud', categoryId: "uuidv4()", itemInStock:5},
   ];
   
   function loadProjects(): Promise<Product[]> {

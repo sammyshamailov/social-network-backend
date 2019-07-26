@@ -1,0 +1,24 @@
+{
+    "Category":[
+        {
+            "id": "75df2bdc-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Photography"
+        },
+        {
+            "id": "75df2e34-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Computer Parts"
+        },
+        {
+            "id": "75df2f88-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Communication"
+        },
+        {
+            "id": "75df323a-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Bottles"
+        },
+        {
+            "id": "75df3384-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Screens"
+        }
+    ]
+}

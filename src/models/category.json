@@ -1,15 +1,15 @@
 {
     "Category":[
         {
-            "id": "75df2bdc-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "id": "1d55767e-af26-11e9-a2a3-2a2ae2dbcce4",
             "name": "Photography"
         },
         {
-            "id": "75df2e34-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "id": "1d557b6a-af26-11e9-a2a3-2a2ae2dbcce4",
             "name": "Computer Parts"
         },
         {
-            "id": "75df2f88-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "id": "1d558614-af26-11e9-a2a3-2a2ae2dbcce4",
             "name": "Communication"
         },
         {
@@ -17,7 +17,7 @@
             "name": "Bottles"
         },
         {
-            "id": "75df3384-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "id": "1d55813c-af26-11e9-a2a3-2a2ae2dbcce4",
             "name": "Screens"
         }
     ]

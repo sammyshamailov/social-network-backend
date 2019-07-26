@@ -3,7 +3,13 @@
         {
             "id": "1d55741c-af26-11e9-a2a3-2a2ae2dbcce4",
             "categoryId": "1d55767e-af26-11e9-a2a3-2a2ae2dbcce4",
-            "name": "Camera",
+            "name": "Iphone Camera",
+            "itemInStock": 5
+        },
+        {
+            "id": "75df4b3a-af2b-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d55767e-af26-11e9-a2a3-2a2ae2dbcce4",
+            "name": "Xiaomi Camera",
             "itemInStock": 5
         },
         {
@@ -14,14 +20,14 @@
         },
         {
             "id": "1d557ca0-af26-11e9-a2a3-2a2ae2dbcce4",
-            "categoryId": "1d557dd6-af26-11e9-a2a3-2a2ae2dbcce4",
+            "categoryId": "1d557b6a-af26-11e9-a2a3-2a2ae2dbcce4",
             "name": "Mouse",
             "itemInStock": 2
         },
         {
             "id": "1d557f02-af26-11e9-a2a3-2a2ae2dbcce4",
             "categoryId": "1d55813c-af26-11e9-a2a3-2a2ae2dbcce4",
-            "name": "HardDisk",
+            "name": "LCD Screen",
             "itemInStock": 3
         },
         {

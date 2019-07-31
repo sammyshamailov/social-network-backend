@@ -50,19 +50,20 @@ router.get('/:id', (req, res) => {
 
 router.get('/:id/products', (req, res) => {
     const id = req.params.id;
+
+    if (id.length < 36){
+      res.sendStatus(404);
+      return;
+    }
+
     let productList: Product[] = [];
     for (let i: number = 0; i < products.length; i++){
         if(products[i].categoryId === id){
             productList.push(products[i]);
         }
     }
-
-    if (id.length < 36){
-      res.sendStatus(404);
-      return;
-    }
   
-    else if (productList.length === 0) {
+    if (productList.length === 0) {
       res.sendStatus(400);
       return;
     }
@@ -73,6 +74,11 @@ router.get('/:id/products', (req, res) => {
 router.post('/', (req, res) => {
   const category: Category = req.body;
   
+  if((!category.name) || (category.name.length < 3)){
+    res.sendStatus(409);
+    return;
+  }
+
   category.id = uuidv1();
   categories.push(category);
   res.status(201).send(category);
@@ -84,6 +90,11 @@ router.put('/:id',
     const { categoryId, matchingIndex } = res.locals;
   
     const category: Category = req.body;
+
+    if((!category.name) || (category.name.length < 3)){
+      res.sendStatus(409);
+      return;
+    }
 
     category.id = categoryId;
     categories[matchingIndex] = category;

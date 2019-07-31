@@ -50,7 +50,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   const product: Product = req.body;
 
-  if(product.name.length < 3){
+  if((!product.name) || (product.name.length < 3)){
     res.sendStatus(409);
     return;
   }
@@ -60,7 +60,7 @@ router.post('/', (req, res) => {
   if(!product.categoryId){
     product.categoryId = uuidv1();
   }
-  
+
   products.push(product);
   res.status(201).send(product);
 });
@@ -72,7 +72,7 @@ router.put('/:id',
   
     const product: Product = req.body;
 
-    if(product.name && product.name.length < 3){
+    if((!product.name) || (product.name.length < 3)){
       res.sendStatus(409);
       return;
     }

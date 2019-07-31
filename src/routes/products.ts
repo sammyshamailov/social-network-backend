@@ -56,7 +56,11 @@ router.post('/', (req, res) => {
   }
   
   product.id = uuidv1();
-  product.categoryId = uuidv1();
+
+  if(!product.categoryId){
+    product.categoryId = uuidv1();
+  }
+  
   products.push(product);
   res.status(201).send(product);
 });

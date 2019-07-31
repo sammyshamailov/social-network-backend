@@ -51,7 +51,6 @@ router.get('/:id', (req, res) => {
 router.get('/:id/products', (req, res) => {
     const id = req.params.id;
     let productList: Product[] = [];
-    let productsIndex: number[] = [];
     for (let i: number = 0; i < products.length; i++){
         if(products[i].categoryId === id){
             productList.push(products[i]);

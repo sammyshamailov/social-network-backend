@@ -6,6 +6,29 @@ import { idValidation } from '../middleware/validation';
 const categories: Category[] = CategoryData;
 const products: Product[] = ProductData;
 
+function loadCategories(): Promise<Category[]> {
+  return Promise.resolve(categories);
+}
+
+function wrapAsyncAndSend(
+  handler: (req: Request, res: Response, next?: NextFunction) => Promise<Category[]>,
+): (req: Request, res: Response, next: NextFunction) => void {
+  return (req: Request, res: Response, next?: NextFunction) => {
+    handler(req, res, next)
+      .then(data => {
+        const id = req.params.id;
+        const matching = data.find(o => o.id === id);
+    
+        if (!matching) {
+          res.sendStatus(404);
+          return;
+          // throw new Error('test');
+        }
+        res.send(matching);
+      })
+      .catch(next);
+  };
+}
 
 function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
   const id = req.params.id;
@@ -29,10 +52,10 @@ router.get('/', (req, res) => {
 
 router.get('/:id',
   idValidation,
-  findCategoryIndex,
-  (req, res) => {
-    res.send(categories[res.locals.matchingIndex]);
-  });
+  wrapAsyncAndSend(async (req, res, next) => {
+    const categories = await loadCategories();
+    return categories;
+  }));
 
 router.get('/:id/products',
   idValidation,

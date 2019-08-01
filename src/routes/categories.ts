@@ -11,12 +11,12 @@ function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
   const matchingIndex = categories.findIndex(o => o.id === id);
   
   if (id.length < 36){
-    res.sendStatus(404);
+    res.sendStatus(400);
     return;
   }
 
   else if (matchingIndex < 0) {
-    res.sendStatus(400);
+    res.sendStatus(404);
     return;
   }
   
@@ -31,28 +31,15 @@ router.get('/', (req, res) => {
   res.send(categories);
 });
 
-router.get('/:id', (req, res) => {
-  const id = req.params.id;
-  const matching = categories.find(o => o.id === id);
-  
-  if (id.length < 36){
-    res.sendStatus(404);
-    return;
-  }
-
-  else if (!matching) {
-    res.sendStatus(400);
-    return;
-  }
-  
-  res.send(matching);
+router.get('/:id', findCategoryIndex, (req, res) => {
+  res.send(categories[res.locals.matchingIndex]);
 });
 
 router.get('/:id/products', (req, res) => {
     const id = req.params.id;
 
     if (id.length < 36){
-      res.sendStatus(404);
+      res.sendStatus(400);
       return;
     }
 
@@ -64,7 +51,7 @@ router.get('/:id/products', (req, res) => {
     }
   
     if (productList.length === 0) {
-      res.sendStatus(400);
+      res.sendStatus(404);
       return;
     }
     
@@ -73,11 +60,6 @@ router.get('/:id/products', (req, res) => {
   
 router.post('/', (req, res) => {
   const category: Category = req.body;
-  
-  if((!category.name) || (category.name.length < 3)){
-    res.sendStatus(409);
-    return;
-  }
 
   category.id = uuidv1();
   categories.push(category);
@@ -90,11 +72,6 @@ router.put('/:id',
     const { categoryId, matchingIndex } = res.locals;
   
     const category: Category = req.body;
-
-    if((!category.name) || (category.name.length < 3)){
-      res.sendStatus(409);
-      return;
-    }
 
     category.id = categoryId;
     categories[matchingIndex] = category;

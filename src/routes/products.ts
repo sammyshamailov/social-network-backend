@@ -11,7 +11,7 @@ function findProductIndex(req: Request, res: Response, next: NextFunction) {
   const matchingIndex = products.findIndex(o => o.id === id);
 
   if (matchingIndex < 0) {
-    res.sendStatus(400);
+    res.sendStatus(404);
     return;
   }
 
@@ -28,16 +28,9 @@ router.get('/', (req, res) => {
 
 router.get('/:id',
   idValidation,
+  findProductIndex,
   (req, res) => {
-    const id = req.params.id;
-    const matching = products.find(o => o.id === id);
-
-    if (!matching) {
-      res.sendStatus(400);
-      return;
-    }
-
-    res.send(matching);
+    res.send(products[res.locals.matchingIndex]);
   });
 
 router.post('/',

@@ -51,10 +51,21 @@ router.get('/', (req, res) => {
 
 router.get('/:id',
   idValidation,
-  wrapAsyncAndSend(async (req, res, next) => {
-    const products = await loadProducts();
-    return products;
-  }));
+  (req, res, next) => {
+    const id = req.params.id;
+    loadProducts()
+      .then(products => {
+        const matching = products.find(o => o.id === id);
+
+        if (!matching) {
+          res.sendStatus(404);
+          return;
+        }
+
+        res.send(matching);
+      })
+      .catch(next);
+  });
 
 router.post('/',
   nameValidation,

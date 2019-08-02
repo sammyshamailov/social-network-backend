@@ -2,14 +2,9 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { Category, Product } from '../models';
 import uuidv1 from 'uuid/v1';
 import { idValidation } from '../middleware/validation';
-import { createHttpClient } from '../utils/http-client';
+import {categoryData, productsData} from '../store/index';
 
-const client = createHttpClient(`http://localhost:3000/public`);
-
-let categoryData = setCategories();
 let categories: Category[];
-
-let productsData = setProducts();
 let products: Product[];
 
 function loadProducts(): Promise<Product[]> {
@@ -18,26 +13,6 @@ function loadProducts(): Promise<Product[]> {
 
 function loadCategories(): Promise<Category[]> {
   return Promise.resolve(categoryData);
-}
-
-async function setProducts(): Promise<Product[]> {
-  try {
-    let list = await client.get('/product.json');
-    return list.Product;
-  }
-  catch (err) {
-    throw new Error(err);
-  }
-}
-
-async function setCategories(): Promise<Category[]> {
-  try {
-    let list = await client.get('/category.json');
-    return list.Category;
-  }
-  catch (err) {
-    throw new Error(err);
-  }
 }
 
 function findCategoryIndex(req: Request, res: Response, next: NextFunction) {

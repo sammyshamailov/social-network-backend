@@ -1,4 +1,5 @@
 import { app } from './app';
+import {setData} from './store/index';
 
 app.set('port', process.env.PORT || 3000);
 
@@ -10,3 +11,5 @@ const server = app.listen(app.get('port'), () => {
   );
   console.log(' Press CTRL-C to stop\n');
 });
+
+setData();

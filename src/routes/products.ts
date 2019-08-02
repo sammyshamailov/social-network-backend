@@ -2,25 +2,10 @@ import { Request, Response, NextFunction, Router } from 'express';
 import {Product } from '../models';
 import uuidv1 from 'uuid/v1';
 import { nameValidation, idValidation } from '../middleware/validation';
-import { createHttpClient } from '../utils/http-client';
-
-const client = createHttpClient(`http://localhost:3000/public`);
-
-let productsData = setProducts();
-let products: Product[];
+import { products } from '../store/index';
 
 function loadProducts(): Promise<Product[]> {
-  return Promise.resolve(productsData);
-}
-
-async function setProducts(): Promise<Product[]> {
-  try{
-    let list = await client.get('/product.json');
-    return list.Product;
-  }
-  catch(err){
-    throw new Error(err);
-  }
+  return Promise.resolve(products);
 }
 
 function findProductIndex(req: Request, res: Response, next: NextFunction) {
@@ -40,7 +25,6 @@ function findProductIndex(req: Request, res: Response, next: NextFunction) {
 const router = Router();
 
 router.get('/', async (req, res) => {
-  products = await loadProducts();
   res.send(products);
 });
 

@@ -1,6 +1,4 @@
 import { app } from './app';
-import { createHttpClient } from './utils/http-client';
-import request from 'request';
 
 app.set('port', process.env.PORT || 3000);
 

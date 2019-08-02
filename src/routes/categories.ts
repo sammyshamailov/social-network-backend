@@ -1,33 +1,43 @@
 import { Request, Response, NextFunction, Router } from 'express';
-import { CategoryData, Category, Product, ProductData } from '../models';
+import { Category, Product } from '../models';
 import uuidv1 from 'uuid/v1';
 import { idValidation } from '../middleware/validation';
+import { createHttpClient } from '../utils/http-client';
 
-const categories: Category[] = CategoryData;
-const products: Product[] = ProductData;
+const client = createHttpClient(`http://localhost:3000/public`);
 
-function loadCategories(): Promise<Category[]> {
-  return Promise.resolve(categories);
+let categoryData = setCategories();
+let categories: Category[];
+
+let productsData = setProducts();
+let products: Product[];
+
+function loadProducts(): Promise<Product[]> {
+  return Promise.resolve(productsData);
 }
 
-function wrapAsyncAndSend(
-  handler: (req: Request, res: Response, next?: NextFunction) => Promise<Category[]>,
-): (req: Request, res: Response, next: NextFunction) => void {
-  return (req: Request, res: Response, next?: NextFunction) => {
-    handler(req, res, next)
-      .then(data => {
-        const id = req.params.id;
-        const matching = data.find(o => o.id === id);
-    
-        if (!matching) {
-          res.sendStatus(404);
-          return;
-          // throw new Error('test');
-        }
-        res.send(matching);
-      })
-      .catch(next);
-  };
+function loadCategories(): Promise<Category[]> {
+  return Promise.resolve(categoryData);
+}
+
+async function setProducts(): Promise<Product[]> {
+  try {
+    let list = await client.get('/product.json');
+    return list.Product;
+  }
+  catch (err) {
+    throw new Error(err);
+  }
+}
+
+async function setCategories(): Promise<Category[]> {
+  try {
+    let list = await client.get('/category.json');
+    return list.Category;
+  }
+  catch (err) {
+    throw new Error(err);
+  }
 }
 
 function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
@@ -46,23 +56,36 @@ function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  products = await loadProducts();
+  categories = await loadCategories();
   res.send(categories);
 });
 
 router.get('/:id',
   idValidation,
-  wrapAsyncAndSend(async (req, res, next) => {
-    const categories = await loadCategories();
-    return categories;
-  }));
+  (req, res, next) => {
+    const id = req.params.id;
+    loadCategories()
+      .then(categories => {
+        const matching = categories.find(o => o.id === id);
+
+        if (!matching) {
+          res.sendStatus(404);
+          return;
+        }
+
+        res.send(matching);
+      })
+      .catch(next);
+  });
 
 router.get('/:id/products',
   idValidation,
   (req, res) => {
     const id = req.params.id;
 
-    let productList: Product[] = [];
+    const productList: Product[] = [];
     for (let i: number = 0; i < products.length; i++) {
       if (products[i].categoryId === id) {
         productList.push(products[i]);

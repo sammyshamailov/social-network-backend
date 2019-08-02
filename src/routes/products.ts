@@ -1,32 +1,26 @@
 import { Request, Response, NextFunction, Router } from 'express';
-import { ProductData, Product } from '../models';
+import {Product } from '../models';
 import uuidv1 from 'uuid/v1';
 import { nameValidation, idValidation } from '../middleware/validation';
+import { createHttpClient } from '../utils/http-client';
 
-const products: Product[] = ProductData;
+const client = createHttpClient(`http://localhost:3000/public`);
+
+let productsData = setProducts();
+let products: Product[];
 
 function loadProducts(): Promise<Product[]> {
-  return Promise.resolve(products);
+  return Promise.resolve(productsData);
 }
 
-function wrapAsyncAndSend(
-  handler: (req: Request, res: Response, next?: NextFunction) => Promise<Product[]>,
-): (req: Request, res: Response, next: NextFunction) => void {
-  return (req: Request, res: Response, next?: NextFunction) => {
-    handler(req, res, next)
-      .then(data => {
-        const id = req.params.id;
-        const matching = data.find(o => o.id === id);
-
-        if (!matching) {
-          res.sendStatus(404);
-          return;
-          // throw new Error('test');
-        }
-        res.send(matching);
-      })
-      .catch(next);
-  };
+async function setProducts(): Promise<Product[]> {
+  try{
+    let list = await client.get('/product.json');
+    return list.Product;
+  }
+  catch(err){
+    throw new Error(err);
+  }
 }
 
 function findProductIndex(req: Request, res: Response, next: NextFunction) {
@@ -45,7 +39,8 @@ function findProductIndex(req: Request, res: Response, next: NextFunction) {
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  products = await loadProducts();
   res.send(products);
 });
 

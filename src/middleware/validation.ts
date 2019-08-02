@@ -6,7 +6,7 @@ import {productNameSchema, idSchema} from '../validations/joiSchemas'
 export function nameValidation(req: Request, res: Response, next: NextFunction) {
     
     const product: Product = req.body;
-    const {error, value: v} = joi.validate(product, productNameSchema);
+    const {error, value: v} = joi.validate(product.name, productNameSchema);
     if (error) next(new Error('name'));
     next();
 }

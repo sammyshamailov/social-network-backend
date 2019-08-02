@@ -1,9 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import { router as productsRouter } from './routes/products';
-import { router as categoriesRouter } from './routes/categories';
+// // import { router as productsRouter } from './routes/products';
+// import { router as categoriesRouter } from './routes/categories';
 import { inputError } from './middleware/error';
 import path from 'path';
+import { initConfig } from './utils/config';
+import productsRouter from './routes/products.routes';
+import categoriesRouter from './routes/categories.routes'
+
+initConfig();
 
 
 const app = express();
@@ -14,9 +19,10 @@ app.use(cors());
 
 app.use('/public', express.static(path.join(__dirname, 'static')));
 
-app.use('/products', productsRouter);
-app.use('/categories', categoriesRouter);
-
+// app.use('/products', productsRouter);
+// app.use('/categories', categoriesRouter);
+categoriesRouter(app);
+productsRouter(app);
 app.use(inputError);
 
 

@@ -2,17 +2,14 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { Category, Product } from '../models';
 import uuidv1 from 'uuid/v1';
 import { idValidation } from '../middleware/validation';
-import {categoryData, productsData} from '../store/index';
-
-let categories: Category[];
-let products: Product[];
+import {categories, products} from '../store/index';
 
 function loadProducts(): Promise<Product[]> {
-  return Promise.resolve(productsData);
+  return Promise.resolve(products);
 }
 
 function loadCategories(): Promise<Category[]> {
-  return Promise.resolve(categoryData);
+  return Promise.resolve(categories);
 }
 
 function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
@@ -32,8 +29,6 @@ function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
 const router = Router();
 
 router.get('/', async (req, res) => {
-  products = await loadProducts();
-  categories = await loadCategories();
   res.send(categories);
 });
 

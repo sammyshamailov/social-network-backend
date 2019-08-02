@@ -1,7 +1,9 @@
 import { app } from './app';
-import {setData} from './store/index';
+import { init } from './store/index';
+import { getConfig } from './utils/config';
 
-app.set('port', process.env.PORT || 3000);
+const port = +(getConfig('PORT', 3000));
+app.set('port', port);
 
 const server = app.listen(app.get('port'), () => {
   console.log(
@@ -12,4 +14,4 @@ const server = app.listen(app.get('port'), () => {
   console.log(' Press CTRL-C to stop\n');
 });
 
-setData();
+init();

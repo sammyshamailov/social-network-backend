@@ -9,7 +9,7 @@ function router(app: Application) {
 
   app.post('/products', nameValidation, productsController.add);
 
-  app.put('/products/:id', idValidation,  productsController.update);
+  app.put('/products/:id', idValidation, nameValidation,  productsController.update);
 
   app.delete('/products/:id', idValidation, productsController.remove);
 }

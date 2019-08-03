@@ -19,10 +19,9 @@ app.use(cors());
 
 app.use('/public', express.static(path.join(__dirname, 'static')));
 
-// app.use('/products', productsRouter);
-// app.use('/categories', categoriesRouter);
 categoriesRouter(app);
 productsRouter(app);
+
 app.use(inputError);
 
 

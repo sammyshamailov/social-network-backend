@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Product } from '../models';
 import productsService from '../services/products.service';
-import { nameValidation, idValidation } from '../middleware/validation';
 
 export function getAll(req: Request, res: Response): void {
   const products = productsService.getAll();

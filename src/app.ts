@@ -1,8 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-// // import { router as productsRouter } from './routes/products';
-// import { router as categoriesRouter } from './routes/categories';
-import { inputError } from './middleware/error';
+import { inputError, notFoundError } from './middleware/error';
 import path from 'path';
 import { initConfig } from './utils/config';
 import productsRouter from './routes/products.routes';
@@ -23,6 +21,7 @@ categoriesRouter(app);
 productsRouter(app);
 
 app.use(inputError);
+app.use(notFoundError);
 
 
 export { app };

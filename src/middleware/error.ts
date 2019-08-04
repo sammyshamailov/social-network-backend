@@ -12,9 +12,6 @@ export function inputError(err: Error, req: Request, res: Response, next: NextFu
     next(err);
 }
 
-<<<<<<< HEAD
-enum errorType {name = 'name', id = "id"};
-=======
 export function notFoundError(err: Error, req: Request, res: Response, next: NextFunction){
     if(err.message === errorType.notFound){
         res.status(404).send('there is no item with this id');
@@ -24,4 +21,3 @@ export function notFoundError(err: Error, req: Request, res: Response, next: Nex
 }
 
 enum errorType {name = 'name', id = "id", notFound = "not-found"};
->>>>>>> express.js-2

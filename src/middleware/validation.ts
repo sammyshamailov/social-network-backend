@@ -1,19 +1,34 @@
 import { Request, Response, NextFunction } from 'express';
-import { Product } from '../models';
 import joi from 'joi';
-import {productNameSchema, idSchema} from '../validations/joiSchemas'
+import { passwordSchema, emailScehma } from '../validations/common';
+import mongoose from 'mongoose';
+import { ErrorTypes } from './error';
 
-export function nameValidation(req: Request, res: Response, next: NextFunction) {
-    
-    const product: Product = req.body;
-    const {error, value: v} = joi.validate(product.name, productNameSchema);
-    if (error) next(new Error('name'));
+function passwordValidation(req: Request, res: Response, next: NextFunction) {
+    const { error, value } = joi.validate(req.body.password, passwordSchema);
+    if (error) {
+        res.status(400).send(ErrorTypes.badPasswordFormat);
+        return;
+    }
     next();
 }
 
-export function idValidation(req: Request, res: Response, next: NextFunction) {
-    
-    const {error, value: v} = joi.validate(req.params.id, idSchema);
-    if (error) next(new Error('id'));
+function idValidation(req: Request, res: Response, next: NextFunction) {
+    const answer = mongoose.Types.ObjectId.isValid(req.params.id);
+    if (!answer) {
+        res.status(400).send(ErrorTypes.badIdFormat);
+        return;
+    }
     next();
-  }
+}
+
+function emailValidation(req: Request, res: Response, next: NextFunction) {
+    const { error, value } = joi.validate(req.body.email, emailScehma);
+    if(error) {
+        res.status(400).send(ErrorTypes.badEmailFormat);
+        return;
+    }
+    next();
+}
+
+export { passwordValidation, idValidation, emailValidation };

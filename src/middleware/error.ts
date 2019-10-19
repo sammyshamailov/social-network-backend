@@ -1,23 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 
-export function inputError(err: Error, req: Request, res: Response, next: NextFunction) {
-    if(err.message === errorType.name){
-        res.status(400).send('product name is less than 3 chars or null');;
-        return;
-    }
-    else if(err.message === errorType.id){
-        res.status(400).send('id is less than 36 chars');
-        return;
-    }
-    next(err);
+function error(err: any, req: Request, res: Response, next: NextFunction) {
+    res.status(500).send(ErrorTypes.serverError);
 }
 
-export function notFoundError(err: Error, req: Request, res: Response, next: NextFunction){
-    if(err.message === errorType.notFound){
-        res.status(404).send('there is no item with this id');
-        return;
-    }
-    next(err);
-}
+enum ErrorTypes {
+  notTheOwner = 'Not the owner',
+  tweetNotFound = 'Tweet not found',
+  unauthorized = 'Unauthorized',
+  badIdFormat = 'Bad id format',
+  noMember = 'Member not found',
+  emailExists = 'Email already exists',
+  usernameExists = 'Username already exists',
+  badPasswordFormat = 'Bad password format',
+  invalidCred = 'Username or email incorrect',
+  badEmailFormat = 'Bad email format',
+  serverError = 'Something went wrong in server',
+  badInput = 'Tweet text length isn\'t between 1 and 240'
+};
 
-enum errorType {name = 'name', id = "id", notFound = "not-found"};
+export { error, ErrorTypes };
+
+

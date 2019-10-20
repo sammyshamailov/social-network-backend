@@ -6,13 +6,13 @@ import { IVerifyOptions } from 'passport-local';
 import { ErrorTypes } from '../middleware/error';
 import authService from '../services/auth.service';
 import config, { KnownConfigKey } from '../utils/config';
+import { UserDetails } from '../models';
 
 const jwtSecret = config.get(KnownConfigKey.JwtSecret);
 
 export async function register(req: Request, res: Response, next: NextFunction) {
-    // TODO ADD AVATAR LOGIC WHEN DONE
     try {
-        const registrationDetails = req.body;
+        const registrationDetails = req.body as UserDetails;
         const addedUser = await authService.register(registrationDetails);
         // enter if email or username already exists.
         if (addedUser === ErrorTypes.emailExists || addedUser === ErrorTypes.usernameExists) {

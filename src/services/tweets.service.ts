@@ -4,6 +4,7 @@ import mongodb from 'mongodb';
 import { ErrorTypes } from '../middleware/error';
 import { TweetToSend, UserToken } from '../models';
 import { DbTweet, DbTweetModel } from '../store/tweets';
+import { DbUser } from '../store/users';
 
 async function getAll(userDetails?: UserToken): Promise<TweetToSend[]> {
     try {
@@ -27,9 +28,11 @@ async function getAll(userDetails?: UserToken): Promise<TweetToSend[]> {
 
 async function addTweet(tweetText: string, userDetails: UserToken): Promise<TweetToSend | null> {
     try {
-        if (tweetText.length > 240 || tweetText.length <= 0){
+        if (tweetText.length > 240 || tweetText.length <= 0) {
             return null;
         }
+        const _id = new mongodb.ObjectID(userDetails._id);
+        const user = await DbUser.findOne({ _id }).exec();
         const tweetForDb = {
             _id: new mongodb.ObjectID().toHexString(),
             text: tweetText,
@@ -37,7 +40,7 @@ async function addTweet(tweetText: string, userDetails: UserToken): Promise<Twee
             username: userDetails.username,
             postDate: moment().format('DD-MM-YYYY'),
             userStars: [String],
-            avatarUrl: 'https://material.angular.io/assets/img/examples/shiba1.jpg'
+            avatarUrl: user? user.avatarUrl : ''
         };
         let tweetForClient = await DbTweet.create(tweetForDb);
         // array of strings in mongoose schemas generates array with one unnecessary index.

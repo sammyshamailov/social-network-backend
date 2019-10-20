@@ -6,3 +6,13 @@ export interface User {
     registrationDate: string;
     lastLoginDate: string;
 }
+
+export interface UserDetails {
+    email: string;
+    username: string;
+    file: {
+        content: string;
+        name: String;
+    }
+    password: string;
+}

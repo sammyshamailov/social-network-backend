@@ -1,9 +1,17 @@
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import tweetsService from '../services/tweets.service';
-import { UserToken, TweetToSend, TweetText } from '../models';
-import { ErrorTypes } from '../middleware/error'
 
+import { ErrorTypes } from '../middleware/error';
+import { TweetText, TweetToSend, UserToken } from '../models';
+import tweetsService from '../services/tweets.service';
+
+/**
+ * Sends user details to service if authenticated user requests tweets.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns all tweets.
+ */
 export async function getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         let tweets: TweetToSend[];
@@ -16,6 +24,13 @@ export async function getAll(req: Request, res: Response, next: NextFunction): P
     }
 }
 
+/**
+ * Sends tweet text and user details to service.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns new tweet or 400 error if bad input.
+ */
 export async function addTweet(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const tweetText = req.body as TweetText;
@@ -37,6 +52,15 @@ export async function addTweet(req: Request, res: Response, next: NextFunction):
     }
 }
 
+/**
+ * Sends tweet id for delete and user details to service.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns 404 if tweet doesn't exist,
+ * 409 if requesting user isn't the owner.
+ * 204 if tweet deleted successfully.
+ */
 export async function deleteTweet(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const tweetId: string = req.params.id;
@@ -62,6 +86,14 @@ export async function deleteTweet(req: Request, res: Response, next: NextFunctio
     }
 }
 
+/**
+ * Sends tweet id for star-toggle and user details to service.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns 404 if tweet doesn't exist,
+ * else updated star count and starredByMe state.
+ */
 export async function starTweet(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const tweetId = req.params.id;
@@ -85,6 +117,11 @@ export async function starTweet(req: Request, res: Response, next: NextFunction)
     }
 }
 
+/**
+ * Helper function for decoding user details from token.
+ * @param [authorizationHeader] Authorization header containing token.
+ * @returns user details from token.
+ */
 function getUserDetailsFromToken(authorizationHeader?: string): UserToken | undefined {
     if (authorizationHeader) {
         const tokenStartPlace: number = authorizationHeader.indexOf(' ') + 1;

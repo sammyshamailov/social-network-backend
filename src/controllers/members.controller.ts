@@ -1,9 +1,19 @@
-import { Request, Response, NextFunction } from 'express';
-import membersService from '../services/members.service';
-import { User, TweetToSend, UserToken } from '../models';
-import { ErrorTypes } from '../middleware/error';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
+import { ErrorTypes } from '../middleware/error';
+import { TweetToSend, User, UserToken } from '../models';
+import membersService from '../services/members.service';
+
+/**
+ * Sends member id to service.
+ * If member does not exist sends 404 error.
+ * Else sends 200 with the user details.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns error or user details.
+ */
 export async function getMember(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const memberId: string = req.params.id
@@ -21,6 +31,15 @@ export async function getMember(req: Request, res: Response, next: NextFunction)
     }
 }
 
+/**
+ * Sends user id and user details decrypted from token for logged in user.
+ * If member does not exist sends 404 error.
+ * Else sends 200 with the user tweets.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns error member tweets 
+ */
 export async function getMemberTweets(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const memberId: string = req.params.id
@@ -39,6 +58,11 @@ export async function getMemberTweets(req: Request, res: Response, next: NextFun
     }
 }
 
+/**
+ * Helper function for decoding user details from token
+ * @param [authorizationHeader] Authorization header content.
+ * @returns user details from token or undefined if there is no content in header.
+ */
 function getUserDetailsFromToken(authorizationHeader?: string): UserToken | undefined {
     if (authorizationHeader) {
         const tokenStartPlace: number = authorizationHeader.indexOf(' ') + 1;

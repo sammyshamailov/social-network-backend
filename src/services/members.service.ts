@@ -4,11 +4,16 @@ import { TweetToSend, User, UserToken } from '../models';
 import { DbTweet, DbTweetModel } from '../store/tweets';
 import { DbUser, DbUserModel } from '../store/users';
 
+/**
+ * Retrieves requested member from server.
+ * @param memberId requested member id.
+ * @returns error if member doesn't exist, otherwise member.
+ */
 export async function getMember(memberId: string): Promise<User | null> {
   try {
     const _id = new mongodb.ObjectId(memberId);
     const memberFromDb = await DbUser.findOne({ _id }, { password: 0 });
-    if (memberFromDb) return transformToClientUserModel(memberFromDb);
+    if (memberFromDb) { return transformToClientUserModel(memberFromDb); }
     return null
   }
   catch (err) {
@@ -16,6 +21,13 @@ export async function getMember(memberId: string): Promise<User | null> {
   }
 }
 
+/**
+ * Retrieves requested member tweets from server.
+ * @param memberId requested member id for his tweets.
+ * @param [userDetails] user details decrypted from token
+ * if authenticated user requested tweets.
+ * @returns member tweets or null if member doesn't exist.
+ */
 export async function getMemberTweets(memberId: string, userDetails?: UserToken): Promise<TweetToSend[] | null> {
   try {
     const _id = new mongodb.ObjectId(memberId);
@@ -41,6 +53,11 @@ export async function getMemberTweets(memberId: string, userDetails?: UserToken)
   }
 }
 
+/**
+ * Helper function for creating client user model from db user model.
+ * @param dbUser db user model.
+ * @returns client user model.
+ */
 function transformToClientUserModel(dbUser: DbUserModel): User {
   const user: User = {
     email: dbUser.email,
@@ -53,6 +70,11 @@ function transformToClientUserModel(dbUser: DbUserModel): User {
   return user;
 }
 
+/**
+ * Helper function for creating client tweet model from db tweet model.
+ * @param dbTweet db tweet model.
+ * @returns client tweet model. 
+ */
 function transformToClientTweetModel(dbTweet: DbTweetModel): TweetToSend {
   const tweet: TweetToSend = {
     _id: dbTweet._id,

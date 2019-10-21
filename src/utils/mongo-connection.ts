@@ -8,6 +8,9 @@ export class MongoConnection {
     public readonly url: string,
   ) {}
 
+  /**
+   * Connects to mongo server
+   */
   public async connect(): Promise<void> {
     this.client = await mongoose.connect(
       this.url,
@@ -17,6 +20,10 @@ export class MongoConnection {
     this.initialized = true;
   }
 
+  /**
+   * Closes connection with mongo server
+   * @returns close 
+   */
   public async close(): Promise<void> {
     if (!this.initialized) return;
     await this.client!.disconnect();

@@ -7,7 +7,10 @@ import { UserToken, User } from '../models';
 import { DbUser, DbUserModel } from '../store/users';
 import config, { KnownConfigKey } from './config';
 
-export function initPassport() {
+/**
+ * Inits passport strategies.
+ */
+export function initPassport(): void {
   //local strategy for login
   passport.use(new LocalStrategy(
     {
@@ -21,10 +24,14 @@ export function initPassport() {
             if (user) {
               user.lastLoginDate = moment().format('DD-MM-YYYY');
               user.save();
+
+              // required user details for token.
               const userToken: UserToken = {
                 _id: user._id,
                 username: user.username
               }
+
+              //required user details to client side.
               const userForClient: User = {
                 ...userToken,
                 email: user.email,

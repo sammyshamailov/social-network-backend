@@ -10,7 +10,16 @@ import { UserDetails } from '../models';
 
 const jwtSecret = config.get(KnownConfigKey.JwtSecret);
 
-export async function register(req: Request, res: Response, next: NextFunction) {
+/**
+ * Sends registration details to service.
+ * If username or email already exist send 409 error.
+ * Else sends 201 with the user details and token.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns error or user details and token.
+ */
+export async function register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const registrationDetails = req.body as UserDetails;
         const addedUser = await authService.register(registrationDetails);
@@ -28,6 +37,15 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     }
 }
 
+/**
+ * Authenticated user for logging in to the system.
+ * If credentials are invalid sends 400 error.
+ * Else sends 200 with the user details and token.
+ * @param req Request.
+ * @param res Response.
+ * @param next NextFunction.
+ * @returns error or user details and token.
+ */
 export function login(req: Request, res: Response, next: NextFunction) {
     passport.authenticate('local', { session: false }, (err: Error, userToSendAndToken, info: IVerifyOptions) => {
         if (err || !userToSendAndToken) {

@@ -6,6 +6,12 @@ import { TweetToSend, UserToken } from '../models';
 import { DbTweet, DbTweetModel } from '../store/tweets';
 import { DbUser } from '../store/users';
 
+/**
+ * Retrieves all tweets from server.
+ * If authenticated user requests tweets, sets starredByMe state for each tweet.
+ * @param [userDetails] authenticated user details from token.
+ * @returns all tweets from old to new to controller.
+ */
 async function getAll(userDetails?: UserToken): Promise<TweetToSend[]> {
     try {
         const tweetsFromDb = await DbTweet.find().exec();
@@ -26,6 +32,12 @@ async function getAll(userDetails?: UserToken): Promise<TweetToSend[]> {
     }
 }
 
+/**
+ * Adds tweet to db if tweet text didn't exceed limit.
+ * @param tweetText tweet content.
+ * @param userDetails user details of user that posted.
+ * @returns new tweet or null if tweet text exceeded limit.
+ */
 async function addTweet(tweetText: string, userDetails: UserToken): Promise<TweetToSend | null> {
     try {
         if (tweetText.length > 240 || tweetText.length <= 0) {
@@ -53,6 +65,12 @@ async function addTweet(tweetText: string, userDetails: UserToken): Promise<Twee
     }
 }
 
+/**
+ * Sends delete request to the server.
+ * @param tweetId tweet id for delete.
+ * @param userDetails user details of requesting user.
+ * @returns true if tweet delted successfully, else right error.
+ */
 async function deleteTweet(tweetId: string, userDetails: UserToken) {
     try {
         const _id = new mongodb.ObjectID(tweetId);
@@ -67,6 +85,12 @@ async function deleteTweet(tweetId: string, userDetails: UserToken) {
     }
 }
 
+/**
+ * Sends star-toggle request to the server.
+ * @param tweetId tweet id for star-toggle.
+ * @param userDetails user details for adding/removing star from tweet.
+ * @returns client tweet model.
+ */
 async function starTweet(tweetId: string, userDetails: UserToken): Promise<TweetToSend | null> {
     try {
         const _id = new mongodb.ObjectID(tweetId);
@@ -74,7 +98,9 @@ async function starTweet(tweetId: string, userDetails: UserToken): Promise<Tweet
         let tweetForClient: TweetToSend;
         if (tweetFromDb) {
             tweetForClient = transformToClientModel(tweetFromDb);
+            // set starredByMe state for each tweet.
             tweetForClient.starredByMe = tweetFromDb.userStars.find(userStar => userStar === userDetails.username) ? true : false;
+            // enter if the tweet was already starred by the requesting user.
             if (tweetForClient.starredByMe) {
                 tweetForClient.stars--;
                 const userStarToDelete = tweetFromDb.userStars.findIndex(userStar => userStar === userDetails.username);
@@ -95,6 +121,11 @@ async function starTweet(tweetId: string, userDetails: UserToken): Promise<Tweet
     }
 }
 
+/**
+ * Helper function for creating client tweet model from db tweet model.
+ * @param dbTweet db tweet model.
+ * @returns client tweet model. 
+ */
 function transformToClientModel(dbTweet: DbTweetModel): TweetToSend {
     const tweet: TweetToSend = {
         _id: dbTweet._id,
